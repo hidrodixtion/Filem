@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit
 class KoinModules {
     val appModules = module {
         single { createLoggingInterceptor() }
-        single { createRetrofitClient(get(), getProperty("APIKEY")) }
-        single { createService(get()) }
+        single { createRetrofitClient(get(), getProperty("API_KEY")) }
+        single { createService(get(), getProperty("BASE_URL")) }
 
         viewModel { MovieListVM(get()) }
     }
@@ -50,11 +50,8 @@ class KoinModules {
         return exisitingBuilder.build()
     }
 
-    fun createService(client: OkHttpClient): IService {
-        val url = "https://api.themoviedb.org/3/"
-
-        val retrofit = Retrofit.Builder().baseUrl(url).client(client)
-
+    fun createService(client: OkHttpClient, baseUrl: String): IService {
+        val retrofit = Retrofit.Builder().baseUrl(baseUrl).client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()

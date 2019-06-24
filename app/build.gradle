@@ -22,6 +22,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        pro {
+            dimension "version"
+        }
+    }
+    productFlavors.all {
+        flavor ->
+            buildConfigField 'String', 'SMALL_IMAGE_URL', SMALL_IMAGE_URL
+            buildConfigField 'String', 'BIG_IMAGE_URL', BIG_IMAGE_URL
+    }
     androidExtensions {
         experimental = true
     }
