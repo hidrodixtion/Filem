@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 /**
  * Created by adinugroho
  */
-class MovieListVM(val service: IService) : ViewModel() {
+class MovieListVM(private val service: IService) : ViewModel() {
     val movies: MutableLiveData<List<Movie>> = MutableLiveData()
 
-    fun getMovies(genreId: Int) {
+    fun getMovies() {
         viewModelScope.launch {
             val response = service.getMovieList()
             movies.value = response.results

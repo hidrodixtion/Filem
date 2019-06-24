@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.lifecycle.Observer
 
 import com.projectbox.filem.R
 import com.projectbox.filem.adapter.MovieListAdapter
 import com.projectbox.filem.viewmodel.MovieListVM
 import kotlinx.android.synthetic.main.fragment_movie_list.*
+import org.jetbrains.anko.startActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -39,6 +41,9 @@ class MovieListFragment : Fragment() {
     private fun initList() {
         adapter = MovieListAdapter(emptyList())
         list_view.adapter = adapter
+        list_view.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            activity?.startActivity<MovieDetailActivity>("data" to adapter.getItem(position))
+        }
     }
 
     private fun initListeners() {
@@ -46,6 +51,6 @@ class MovieListFragment : Fragment() {
             adapter.update(movies)
         })
 
-        vm.getMovies(28)
+        vm.getMovies()
     }
 }

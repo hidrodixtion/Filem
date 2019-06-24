@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="released_date">Released Date</string>
+    <string name="overview">Overview</string>
+    <string name="user_score">User Score</string>
 </resources>
