@@ -1,7 +1,7 @@
 package com.projectbox.filem.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.projectbox.filem.BuildConfig
 import com.projectbox.filem.R

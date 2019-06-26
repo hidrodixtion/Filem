@@ -78,8 +78,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    implementation 'androidx.core:core-ktx:1.0.2'
-
     def anko_version = "0.10.8"
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 }

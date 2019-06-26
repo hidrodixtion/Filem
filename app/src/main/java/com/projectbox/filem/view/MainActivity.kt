@@ -1,12 +1,8 @@
 package com.projectbox.filem.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.projectbox.filem.R
-import com.projectbox.filem.service.IService
-import kotlinx.coroutines.*
-import org.koin.android.ext.android.inject
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 

@@ -14,7 +14,7 @@ import com.projectbox.filem.viewholder.MovieMenuVH
 class MovieListAdapter(var movies: List<Movie>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view = convertView ?: LayoutInflater.from(parent?.context).inflate(R.layout.item_movie_list, parent, false)
+        val view = convertView ?: LayoutInflater.from(parent?.context).inflate(R.layout.item_movie_list, parent, false)
         val vh = MovieMenuVH(view)
         vh.bind(getItem(position))
         return view

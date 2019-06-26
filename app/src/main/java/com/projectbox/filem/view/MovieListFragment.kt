@@ -2,13 +2,12 @@ package com.projectbox.filem.view
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-
 import com.projectbox.filem.R
 import com.projectbox.filem.adapter.MovieListAdapter
 import com.projectbox.filem.viewmodel.MovieListVM
@@ -22,7 +21,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class MovieListFragment : Fragment() {
 
-    val vm by viewModel<MovieListVM>()
+    private val vm by viewModel<MovieListVM>()
 
     lateinit var adapter: MovieListAdapter
 

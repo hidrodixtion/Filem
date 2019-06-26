@@ -1,8 +1,8 @@
 package com.projectbox.filem
 
+import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.service.IService
 import com.projectbox.filem.viewmodel.MovieListVM
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
@@ -21,6 +21,8 @@ class KoinModules {
         single { createRetrofitClient(get(), getProperty("API_KEY")) }
         single { createService(get(), getProperty("BASE_URL")) }
 
+        factory { MovieRepository(get()) }
+
         viewModel { MovieListVM(get()) }
     }
 
@@ -28,12 +30,10 @@ class KoinModules {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
 
-        val builder = OkHttpClient.Builder().addInterceptor(logging)
+        return OkHttpClient.Builder().addInterceptor(logging)
             .connectTimeout(60L, TimeUnit.SECONDS)
             .writeTimeout(60L, TimeUnit.SECONDS)
             .readTimeout(60L, TimeUnit.SECONDS)
-
-        return builder;
     }
 
     private fun createRetrofitClient(exisitingBuilder: OkHttpClient.Builder, apiKey: String): OkHttpClient {
@@ -50,7 +50,7 @@ class KoinModules {
         return exisitingBuilder.build()
     }
 
-    fun createService(client: OkHttpClient, baseUrl: String): IService {
+    private fun createService(client: OkHttpClient, baseUrl: String): IService {
         val retrofit = Retrofit.Builder().baseUrl(baseUrl).client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
