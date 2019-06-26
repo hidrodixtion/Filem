@@ -6,20 +6,21 @@ import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.test.AutoCloseKoinTest
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito
 
 /**
  * Created by adinugroho
  */
-class MovieRepoTest : KoinTest {
+class MovieRepoTest : AutoCloseKoinTest() {
 
     private val movieRepo: MovieRepository by inject()
 
@@ -38,11 +39,6 @@ class MovieRepoTest : KoinTest {
         }
     }
 
-    @After
-    fun after() {
-        stopKoin()
-    }
-
     @Test
     fun `test movie repo is not null`() {
         assertNotNull(movieRepo)
@@ -53,6 +49,7 @@ class MovieRepoTest : KoinTest {
         runBlocking(Unconfined) {
             val list = movieRepo.getMovieList()
 
+            Mockito.verify(movieRepo).getMovieList()
             assertNotNull(list)
         }
     }
