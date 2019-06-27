@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Filem</string>
+    <string name="menu_change_language">Ganti Bahasa</string>
+    <string name="menu_movie">Film</string>
+    <string name="menu_tv">Acara TV</string>
+    <string name="overview">Ikhtisar</string>
+    <string name="released_date">Tanggal Rilis</string>
+    <string name="user_score">Nilai Pemirsa</string>
+    <string name="first_air_date">Tanggal Tayang</string>
+    <string name="title_detail_movie">Detil Film</string>
+    <string name="title_detail_tv">Detil Acara</string>
+</resources>

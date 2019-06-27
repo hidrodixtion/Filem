@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.projectbox.filem.BuildConfig
 import com.projectbox.filem.R
 import com.projectbox.filem.extension.convertToReadableDate
-import com.projectbox.filem.model.Movie
+import com.projectbox.filem.model.MovieTvShow
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlin.math.roundToInt
 
@@ -27,20 +27,36 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun initUi() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Movie Detail"
+        supportActionBar?.title = resources.getString(R.string.title_detail_movie)
     }
 
     private fun fillFields() {
         if (!intent.hasExtra("data"))
             return
 
-        val movie = intent.getParcelableExtra<Movie>("data")
-        txt_title.text = movie.title
-        txt_date.text = movie.releaseDate.convertToReadableDate()
-        txt_overview.text = movie.overview
-        txt_score.text = "${(movie.vote * 10).roundToInt()}%"
+        val data = intent.getParcelableExtra<MovieTvShow>("data")
+        data.movieTitle?.let {
+            txt_title.text = it
+        }
 
-        val posterUrl = "${BuildConfig.BIG_IMAGE_URL}${movie.poster}"
+        data.showTitle?.let {
+            txt_title.text = it
+        }
+
+        data.releaseDate?.let {
+            txt_date.text = it.convertToReadableDate()
+        }
+
+        data.firstAirDate?.let {
+            txt_label_date.text = resources.getString(R.string.first_air_date)
+            txt_date.text = it.convertToReadableDate()
+            supportActionBar?.title = resources.getString(R.string.title_detail_tv)
+        }
+
+        txt_overview.text = data.overview
+        txt_score.text = "${(data.vote * 10).roundToInt()}%"
+
+        val posterUrl = "${BuildConfig.BIG_IMAGE_URL}${data.poster}"
         Glide.with(this).load(posterUrl).into(img_poster)
     }
 }

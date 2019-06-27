@@ -1,6 +1,6 @@
 package com.projectbox.filem.repository
 
-import com.projectbox.filem.model.Movie
+import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.IService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -12,8 +12,14 @@ import kotlinx.coroutines.coroutineScope
  * Also by using repository we can change the vm to use an API repository or DB repository
  */
 class MovieRepository(private val service: IService) {
-    suspend fun getMovieList(): List<Movie> = coroutineScope {
+    suspend fun getMovieList(): List<MovieTvShow> = coroutineScope {
         val defer = async { service.getMovieList() }
+        val response = defer.await()
+        response.results
+    }
+
+    suspend fun getTvShowList(): List<MovieTvShow> = coroutineScope {
+        val defer = async { service.getTvShowList() }
         val response = defer.await()
         response.results
     }

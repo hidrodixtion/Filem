@@ -1,8 +1,10 @@
 package com.projectbox.filem
 
+import android.content.Context
 import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.service.IService
 import com.projectbox.filem.viewmodel.MovieListVM
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit
 class KoinModules {
     val appModules = module {
         single { createLoggingInterceptor() }
-        single { createRetrofitClient(get(), getProperty("API_KEY")) }
+        single { createRetrofitClient(get(), getProperty("API_KEY"), get()) }
         single { createService(get(), getProperty("BASE_URL")) }
 
         factory { MovieRepository(get()) }
@@ -36,17 +38,27 @@ class KoinModules {
             .readTimeout(60L, TimeUnit.SECONDS)
     }
 
-    private fun createRetrofitClient(exisitingBuilder: OkHttpClient.Builder, apiKey: String): OkHttpClient {
+    private fun createRetrofitClient(exisitingBuilder: OkHttpClient.Builder, apiKey: String, context: Context): OkHttpClient {
         exisitingBuilder.addInterceptor { chain ->
             val original = chain.request()
             val originalUrl = original.url()
 
             val url = originalUrl.newBuilder().addQueryParameter("api_key", apiKey).build()
             val requestBuilder = original.newBuilder().url(url)
-
             val request = requestBuilder.build()
+
             return@addInterceptor chain.proceed(request)
         }
+
+        // add cache header
+        val myCache = Cache(context.cacheDir, (5 * 1024 * 1024).toLong())
+        exisitingBuilder.cache(myCache).addInterceptor { chain ->
+            val original = chain.request()
+            // create a cache header
+            val cacheHeaderRequest = original.newBuilder().header("Cache-Control", "public, max-age=" + 10).build()
+            return@addInterceptor chain.proceed(cacheHeaderRequest)
+        }
+
         return exisitingBuilder.build()
     }
 
