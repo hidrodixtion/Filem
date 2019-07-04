@@ -70,6 +70,9 @@ open class MovieTvListFragment : Fragment() {
 
     private fun initListeners() {
         vm.itemList.observe(this, Observer { items ->
+            loading_animation.pauseAnimation()
+            loading_animation.visibility = View.GONE
+            recycler_view.visibility = View.VISIBLE
             adapter.update(items)
         })
 
