@@ -11,4 +11,7 @@
     <string name="first_air_date">Tanggal Tayang</string>
     <string name="title_detail_movie">Detil Film</string>
     <string name="title_detail_tv">Detil Acara</string>
+    <string name="info_no_connection">Tidak dapat memuat data. Pastikan anda terhubung dengan internet.</string>
+    <string name="info_problem">Terjadi kesalahan. Mohon coba lagi.</string>
+    <string name="try_again">Coba Lagi</string>
 </resources>

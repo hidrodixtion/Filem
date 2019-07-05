@@ -22,4 +22,10 @@
             android:layout_height="match_parent"
             android:visibility="gone"/>
 
+    <include android:id="@+id/container_info"
+            layout="@layout/exception_info"
+             android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"/>
 </RelativeLayout>

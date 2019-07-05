@@ -2,6 +2,7 @@ package com.projectbox.filem
 
 import android.content.Context
 import com.projectbox.filem.repository.MovieRepository
+import com.projectbox.filem.service.ConnectivityInterceptor
 import com.projectbox.filem.service.IService
 import com.projectbox.filem.viewmodel.MovieListVM
 import okhttp3.Cache
@@ -10,7 +11,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +39,8 @@ class KoinModules {
     }
 
     private fun createRetrofitClient(exisitingBuilder: OkHttpClient.Builder, apiKey: String, context: Context): OkHttpClient {
+        exisitingBuilder.addInterceptor(ConnectivityInterceptor(context))
+
         exisitingBuilder.addInterceptor { chain ->
             val original = chain.request()
             val originalUrl = original.url()
@@ -65,7 +67,6 @@ class KoinModules {
     private fun createService(client: OkHttpClient, baseUrl: String): IService {
         val retrofit = Retrofit.Builder().baseUrl(baseUrl).client(client)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         return retrofit.create(IService::class.java)
     }
