@@ -2,6 +2,7 @@ package com.projectbox.filem.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.projectbox.filem.BuildConfig
 import com.projectbox.filem.R
@@ -26,8 +27,13 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = resources.getString(R.string.title_detail_movie)
+
+        collapsing_toolbar.title = resources.getString(R.string.title_detail_movie)
+        collapsing_toolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white))
+        collapsing_toolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent))
     }
 
     private fun fillFields() {
@@ -58,5 +64,6 @@ class MovieDetailActivity : AppCompatActivity() {
 
         val posterUrl = "${BuildConfig.BIG_IMAGE_URL}${data.poster}"
         Glide.with(this).load(posterUrl).into(img_poster)
+        Glide.with(this).load(posterUrl).into(img_header)
     }
 }
