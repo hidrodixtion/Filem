@@ -9,8 +9,8 @@ import retrofit2.http.Query
  */
 interface IService {
     @GET("discover/movie")
-    suspend fun getMovieList(@Query("with_genres") genreId: Int = 28): MovieTvShowResponse
+    suspend fun getMovieList(): MovieTvShowResponse
 
     @GET("discover/tv")
-    suspend fun getTvShowList(@Query("with_genres") genreId: Int = 28): MovieTvShowResponse
+    suspend fun getTvShowList(): MovieTvShowResponse
 }
