@@ -4,6 +4,7 @@ import android.content.Context
 import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.service.ConnectivityInterceptor
 import com.projectbox.filem.service.IService
+import com.projectbox.filem.viewmodel.MovieDetailVM
 import com.projectbox.filem.viewmodel.MovieListVM
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -26,6 +27,7 @@ class KoinModules {
         factory { MovieRepository(get()) }
 
         viewModel { MovieListVM(get()) }
+        viewModel { MovieDetailVM(get()) }
     }
 
     private fun createLoggingInterceptor(): OkHttpClient.Builder {

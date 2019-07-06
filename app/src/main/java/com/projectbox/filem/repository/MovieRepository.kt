@@ -1,5 +1,6 @@
 package com.projectbox.filem.repository
 
+import com.projectbox.filem.model.Cast
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.IService
 import kotlinx.coroutines.async
@@ -22,5 +23,11 @@ class MovieRepository(private val service: IService) {
         val defer = async { service.getTvShowList() }
         val response = defer.await()
         response.results
+    }
+
+    suspend fun getCast(movieId: String): List<Cast> = coroutineScope {
+        val defer = async { service.getMovieCredit(movieId)}
+        val response = defer.await()
+        response.cast
     }
 }
