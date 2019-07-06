@@ -18,4 +18,7 @@ interface IService {
 
     @GET("movie/{movieId}/credits")
     suspend fun getMovieCredit(@Path("movieId") movieId: String): CastResponse
+
+    @GET("tv/{tvId}/credits")
+    suspend fun getTvCredit(@Path("tvId") tvId: String): CastResponse
 }

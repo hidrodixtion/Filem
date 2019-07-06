@@ -25,8 +25,14 @@ class MovieRepository(private val service: IService) {
         response.results
     }
 
-    suspend fun getCast(movieId: String): List<Cast> = coroutineScope {
+    suspend fun getMovieCast(movieId: String): List<Cast> = coroutineScope {
         val defer = async { service.getMovieCredit(movieId)}
+        val response = defer.await()
+        response.cast
+    }
+
+    suspend fun getTvCast(tvId: String): List<Cast> = coroutineScope {
+        val defer = async { service.getTvCredit(tvId)}
         val response = defer.await()
         response.cast
     }

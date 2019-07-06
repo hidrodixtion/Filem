@@ -12,6 +12,7 @@ import com.projectbox.filem.R
 import com.projectbox.filem.adapter.CastAdapter
 import com.projectbox.filem.extension.convertToReadableDate
 import com.projectbox.filem.model.AppResult
+import com.projectbox.filem.model.ListType
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.viewmodel.MovieDetailVM
 import kotlinx.android.synthetic.main.activity_movie_detail.*
@@ -25,6 +26,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
     lateinit var adapter: CastAdapter
     lateinit var data: MovieTvShow
+    var type: ListType = ListType.MOVIE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,9 @@ class MovieDetailActivity : AppCompatActivity() {
     private fun fillFields() {
         if (!intent.hasExtra("data"))
             return
+
+        if (intent.hasExtra("type"))
+            type = ListType.valueOf(intent.getStringExtra("type"))
 
         data = intent.getParcelableExtra("data")
         data.movieTitle?.let {
@@ -103,6 +108,6 @@ class MovieDetailActivity : AppCompatActivity() {
         })
 
         if (::data.isInitialized)
-            vm.getCasts(data.id)
+            vm.getCast(type, data.id)
     }
 }

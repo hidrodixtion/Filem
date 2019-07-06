@@ -21,4 +21,10 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
+
+    <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 </resources>

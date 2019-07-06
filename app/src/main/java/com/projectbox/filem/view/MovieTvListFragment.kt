@@ -65,7 +65,7 @@ open class MovieTvListFragment : Fragment() {
 
     private fun initList() {
         adapter = MovieTvAdapter(emptyList()) { item ->
-            activity?.startActivity<MovieDetailActivity>("data" to item)
+            activity?.startActivity<MovieDetailActivity>("data" to item, "type" to listType.name)
         }
 
         recycler_view.layoutManager = LinearLayoutManager(this.activity)

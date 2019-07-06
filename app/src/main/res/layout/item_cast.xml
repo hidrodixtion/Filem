@@ -42,6 +42,7 @@
                     tools:text="JJ Abrams"
                     android:textSize="12sp"
                     android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_marginBottom="2dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:fontFamily="@font/montserrat_bold"/>
