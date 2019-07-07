@@ -4,7 +4,6 @@ import com.projectbox.filem.model.CastResponse
 import com.projectbox.filem.model.MovieTvShowResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 /**
  * Created by adinugroho

@@ -24,9 +24,9 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private val vm by viewModel<MovieDetailVM>()
 
-    lateinit var adapter: CastAdapter
-    lateinit var data: MovieTvShow
-    var type: ListType = ListType.MOVIE
+    private lateinit var adapter: CastAdapter
+    private lateinit var data: MovieTvShow
+    private var type: ListType = ListType.MOVIE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
