@@ -27,4 +27,11 @@
         <item name="android:textColorPrimary">@color/colorText</item>
         <item name="android:background">@color/colorPrimary</item>
     </style>
+
+    <style name="TabTheme" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabTextColor">@color/colorText</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+    </style>
 </resources>

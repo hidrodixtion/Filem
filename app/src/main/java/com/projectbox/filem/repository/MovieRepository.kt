@@ -1,5 +1,6 @@
 package com.projectbox.filem.repository
 
+import com.projectbox.filem.db.dao.FavoriteDao
 import com.projectbox.filem.model.Cast
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.IService
@@ -12,7 +13,7 @@ import kotlinx.coroutines.coroutineScope
  * Because ViewModel is an "Android" class so to test it purely using Unit Test / JUnit will require some configuration & hack
  * Also by using repository we can change the vm to use an API repository or DB repository
  */
-class MovieRepository(private val service: IService) {
+class MovieRepository(private val service: IService, private val dao: FavoriteDao) {
     suspend fun getMovieList(): List<MovieTvShow> = coroutineScope {
         val defer = async { service.getMovieList() }
         val response = defer.await()
@@ -35,5 +36,31 @@ class MovieRepository(private val service: IService) {
         val defer = async { service.getTvCredit(tvId)}
         val response = defer.await()
         response.cast
+    }
+
+    suspend fun getFavoriteMovieList(): List<MovieTvShow> = coroutineScope {
+        val defer = async { dao.getMovieFav() }
+        defer.await()
+    }
+
+    suspend fun getFavoriteTvList(): List<MovieTvShow> = coroutineScope {
+        val defer = async { dao.getTvFav() }
+        defer.await()
+    }
+
+    suspend fun addToFavorite(item: MovieTvShow) = coroutineScope {
+        val defer = async { dao.addToFav(item) }
+        defer.await()
+    }
+
+    suspend fun removeFromFavorite(item: MovieTvShow) = coroutineScope {
+        val defer = async { dao.removeFromFav(item) }
+        defer.await()
+    }
+
+    suspend fun isFavorite(id: String) = coroutineScope {
+        val defer = async { dao.isFavorite(id) }
+        val result = defer.await()
+        result == 1
     }
 }

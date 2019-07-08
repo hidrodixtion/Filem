@@ -9,7 +9,16 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ToolbarPopupTheme"/>
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorHeight="2dp"
+            app:tabMinWidth="40dp"
+            app:tabMode="fixed"
+            style="@style/TabTheme"/>
 </com.google.android.material.appbar.AppBarLayout>
 

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.projectbox.filem.BuildConfig
 import com.projectbox.filem.R
 import com.projectbox.filem.adapter.CastAdapter
@@ -27,6 +28,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var adapter: CastAdapter
     private lateinit var data: MovieTvShow
     private var type: ListType = ListType.MOVIE
+    private var isFavorite: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,15 @@ class MovieDetailActivity : AppCompatActivity() {
 
         adapter = CastAdapter(emptyList())
         recycler_view_cast.adapter = adapter
+
+        fab_favorite.setOnClickListener {
+            val fav = isFavorite ?: false
+            if (fav) {
+                vm.removeFromFavorite(data)
+            } else {
+                vm.setAsFavorite(data)
+            }
+        }
     }
 
     private fun fillFields() {
@@ -107,7 +118,26 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         })
 
-        if (::data.isInitialized)
+        vm.isFavorite.observe(this, Observer { faved ->
+            // If the this is the first time isFavorit is set, then don't show the snackbar
+            // Only show it whenever the isFavorit has been set before
+
+            if (faved) {
+                fab_favorite.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite)
+                if (isFavorite != null)
+                    Snackbar.make(constraint, resources.getString(R.string.added_to_fave), Snackbar.LENGTH_SHORT).show()
+            } else {
+                fab_favorite.icon = ContextCompat.getDrawable(this, R.drawable.ic_unfavorite)
+                if (isFavorite != null)
+                    Snackbar.make(constraint, resources.getString(R.string.removed_from_fave), Snackbar.LENGTH_SHORT).show()
+            }
+
+            isFavorite = faved
+        })
+
+        if (::data.isInitialized) {
             vm.getCast(type, data.id)
+            vm.isFavorited(data.id)
+        }
     }
 }

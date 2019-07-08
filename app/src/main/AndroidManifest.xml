@@ -17,7 +17,8 @@
             tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.MovieDetailActivity"
                   android:theme="@style/NoAppBar"/>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.MainActivity"
+                android:theme="@style/NoAppBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -28,10 +28,12 @@ open class MovieTvListFragment : Fragment() {
 
     companion object {
         const val LIST_TYPE = "list_type_key"
+        const val IS_FAVORITE = "is_favorite_key"
 
-        fun getInstance(listType: ListType): MovieTvListFragment {
+        fun getInstance(listType: ListType, isFavorite: Boolean = false): MovieTvListFragment {
             val bundle = Bundle()
             bundle.putString(LIST_TYPE, listType.name)
+            bundle.putBoolean(IS_FAVORITE, isFavorite)
             val fragment = MovieTvListFragment()
             fragment.arguments = bundle
             return fragment
@@ -40,8 +42,9 @@ open class MovieTvListFragment : Fragment() {
 
     private val vm by viewModel<MovieListVM>()
 
-    lateinit var adapter: MovieTvAdapter
-    var listType = ListType.MOVIE
+    private lateinit var adapter: MovieTvAdapter
+    private var listType = ListType.MOVIE
+    private var isFavorite = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
@@ -53,13 +56,22 @@ open class MovieTvListFragment : Fragment() {
         initArguments()
         initList()
         initListeners()
+        getData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFavorite)
+            getData()
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     private fun initArguments() {
         arguments?.let {
-            if (it.containsKey(LIST_TYPE))
+            if (it.containsKey(LIST_TYPE)) {
                 listType = ListType.valueOf(it.getString(LIST_TYPE))
+                isFavorite = it.getBoolean(IS_FAVORITE)
+            }
         }
     }
 
@@ -83,8 +95,6 @@ open class MovieTvListFragment : Fragment() {
                 is AppResult.Failure -> displayFailureInfo(result.exception)
             }
         })
-
-        getData()
     }
 
     private fun getData() {
@@ -93,8 +103,8 @@ open class MovieTvListFragment : Fragment() {
         loading_animation.visibility = View.VISIBLE
 
         when(listType) {
-            ListType.MOVIE -> vm.getMovies()
-            ListType.TVSHOW -> vm.getTvShow()
+            ListType.MOVIE -> vm.getMovies(isFavorite)
+            ListType.TVSHOW -> vm.getTvShow(isFavorite)
         }
     }
 

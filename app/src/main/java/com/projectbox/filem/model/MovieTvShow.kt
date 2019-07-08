@@ -1,14 +1,18 @@
 package com.projectbox.filem.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by adinugroho
  */
+@Entity
 @Parcelize
 data class MovieTvShow(
+    @PrimaryKey
     val id: String,
     @SerializedName("vote_average") val vote: Double,
     @SerializedName("vote_count") val voteCount: Double,

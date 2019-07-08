@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationMenu
+import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.projectbox.filem.R
+import com.projectbox.filem.adapter.FavoriteVPAdapter
+import com.projectbox.filem.adapter.VPAdapter
 import com.projectbox.filem.model.ListType
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.appbar.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,13 +48,36 @@ class MainActivity : AppCompatActivity() {
 
     private val onBottomNavSelected = BottomNavigationView.OnNavigationItemSelectedListener {
         when (it.itemId) {
-            R.id.menu_movie -> supportFragmentManager.beginTransaction().replace(R.id.container, MovieTvListFragment.getInstance(ListType.MOVIE)).commit()
-            R.id.menu_tv -> supportFragmentManager.beginTransaction().replace(R.id.container, MovieTvListFragment.getInstance(ListType.TVSHOW)).commit()
+            R.id.menu_movie -> refreshViewPagerWithAdapter(VPAdapter(supportFragmentManager, ListType.MOVIE))
+            R.id.menu_tv -> refreshViewPagerWithAdapter(VPAdapter(supportFragmentManager, ListType.TVSHOW))
+            R.id.menu_favorite -> refreshViewPagerWithAdapter(FavoriteVPAdapter(supportFragmentManager, this))
         }
         return@OnNavigationItemSelectedListener true
     }
 
     private fun initUi() {
         bottom_navigation.setOnNavigationItemSelectedListener(onBottomNavSelected)
+
+        tab.setupWithViewPager(view_pager)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = resources.getString(R.string.app_name)
+    }
+
+    private fun refreshViewPagerWithAdapter(adapter: FragmentPagerAdapter) {
+        if (adapter.count == 1) {
+            tab.visibility = View.GONE
+        } else {
+            tab.visibility = View.VISIBLE
+        }
+
+        val transaction = supportFragmentManager.beginTransaction()
+        supportFragmentManager.fragments.forEach {
+            transaction.remove(it)
+        }
+        transaction.commitNow()
+
+        view_pager.removeAllViews()
+        view_pager.adapter = null
+        view_pager.adapter = adapter
     }
 }

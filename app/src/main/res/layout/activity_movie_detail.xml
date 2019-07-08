@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".view.MovieDetailActivity"
         android:background="@color/colorPrimary">
-    
+
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
@@ -49,6 +49,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".view.MovieDetailActivity">
@@ -138,6 +139,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/montserrat_bold"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_favorite"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    app:backgroundTint="@color/colorAccent"
+                    app:elevation="8dp"
+                    app:icon="@drawable/ic_favorite"
+                    app:iconTint="@color/colorText"
+                    android:foregroundTint="@color/colorText"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginBottom="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/card_view"/>
 
             <TextView
                     android:text="@string/overview"

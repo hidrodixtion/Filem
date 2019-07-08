@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class MovieListVM(private val repo: MovieRepository) : ViewModel() {
     val itemList: MutableLiveData<AppResult<List<MovieTvShow>>> = MutableLiveData()
 
-    fun getMovies() {
+    fun getMovies(isFavorite: Boolean = false) {
         viewModelScope.launch {
             try {
-                val result = repo.getMovieList()
+                val result = if (isFavorite) repo.getFavoriteMovieList() else repo.getMovieList()
                 itemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 itemList.value = AppResult.Failure(e)
@@ -26,10 +26,10 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
         }
     }
 
-    fun getTvShow() {
+    fun getTvShow(isFavorite: Boolean = false) {
         viewModelScope.launch {
             try {
-                val result = repo.getTvShowList()
+                val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
                 itemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 itemList.value = AppResult.Failure(e)
