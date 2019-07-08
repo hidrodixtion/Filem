@@ -28,7 +28,8 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var adapter: CastAdapter
     private lateinit var data: MovieTvShow
     private var type: ListType = ListType.MOVIE
-    private var isFavorite: Boolean? = null
+    private var isFavorite: Boolean = false
+    private var isRunningFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +61,7 @@ class MovieDetailActivity : AppCompatActivity() {
         recycler_view_cast.adapter = adapter
 
         fab_favorite.setOnClickListener {
-            val fav = isFavorite ?: false
-            if (fav) {
+            if (isFavorite) {
                 vm.removeFromFavorite(data)
             } else {
                 vm.setAsFavorite(data)
@@ -119,19 +119,17 @@ class MovieDetailActivity : AppCompatActivity() {
         })
 
         vm.isFavorite.observe(this, Observer { faved ->
-            // If the this is the first time isFavorit is set, then don't show the snackbar
-            // Only show it whenever the isFavorit has been set before
-
             if (faved) {
                 fab_favorite.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite)
-                if (isFavorite != null)
+                if (!isRunningFirstTime)
                     Snackbar.make(constraint, resources.getString(R.string.added_to_fave), Snackbar.LENGTH_SHORT).show()
             } else {
                 fab_favorite.icon = ContextCompat.getDrawable(this, R.drawable.ic_unfavorite)
-                if (isFavorite != null)
+                if (!isRunningFirstTime)
                     Snackbar.make(constraint, resources.getString(R.string.removed_from_fave), Snackbar.LENGTH_SHORT).show()
             }
 
+            isRunningFirstTime = false
             isFavorite = faved
         })
 

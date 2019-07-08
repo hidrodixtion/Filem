@@ -18,7 +18,7 @@
         <activity android:name=".view.MovieDetailActivity"
                   android:theme="@style/NoAppBar"/>
         <activity android:name=".view.MainActivity"
-                android:theme="@style/NoAppBar">
+                  android:configChanges="keyboard|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
