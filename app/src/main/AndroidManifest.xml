@@ -17,8 +17,7 @@
             tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.MovieDetailActivity"
                   android:theme="@style/NoAppBar"/>
-        <activity android:name=".view.MainActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

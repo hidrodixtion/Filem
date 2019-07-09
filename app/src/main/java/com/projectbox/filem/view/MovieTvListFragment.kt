@@ -56,7 +56,9 @@ open class MovieTvListFragment : Fragment() {
         initArguments()
         initList()
         initListeners()
-        getData()
+
+        if (savedInstanceState == null)
+            getData()
     }
 
     override fun onResume() {
@@ -89,6 +91,7 @@ open class MovieTvListFragment : Fragment() {
             loading_animation.pauseAnimation()
             loading_animation.visibility = View.GONE
             recycler_view.visibility = View.VISIBLE
+            container_info.visibility = View.GONE
 
             when(result) {
                 is AppResult.Success -> adapter.update(result.data)

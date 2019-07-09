@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = resources.getString(R.string.app_name)
 
-        // Not using a viewpager here, because it doesn't get well with rotation change
+        // Not using a viewpager here, because it doesn't go well with rotation change
         tab.addTab(tab.newTab().setText(resources.getString(R.string.menu_movie)))
         tab.addTab(tab.newTab().setText(resources.getString(R.string.menu_tv)))
         tab.addOnTabSelectedListener(onTabSelected)
