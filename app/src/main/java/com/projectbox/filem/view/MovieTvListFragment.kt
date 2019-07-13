@@ -5,18 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.projectbox.filem.R
 import com.projectbox.filem.adapter.MovieTvAdapter
+import com.projectbox.filem.event.SearchEvent
 import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.ListType
+import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.NoConnectivityException
 import com.projectbox.filem.viewmodel.MovieListVM
 import kotlinx.android.synthetic.main.exception_info.*
 import kotlinx.android.synthetic.main.fragment_movie_list.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.startActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -45,6 +50,7 @@ open class MovieTvListFragment : Fragment() {
     private lateinit var adapter: MovieTvAdapter
     private var listType = ListType.MOVIE
     private var isFavorite = false
+    private var listMovies = emptyList<MovieTvShow>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
@@ -65,6 +71,16 @@ open class MovieTvListFragment : Fragment() {
         super.onResume()
         if (isFavorite)
             getData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -88,26 +104,45 @@ open class MovieTvListFragment : Fragment() {
 
     private fun initListeners() {
         vm.itemList.observe(this, Observer { result ->
-            loading_animation.pauseAnimation()
-            loading_animation.visibility = View.GONE
-            recycler_view.visibility = View.VISIBLE
-            container_info.visibility = View.GONE
-
             when(result) {
-                is AppResult.Success -> adapter.update(result.data)
+                is AppResult.Success -> {
+                    listMovies = result.data
+                    updateList(result.data)
+                }
+                is AppResult.Failure -> displayFailureInfo(result.exception)
+            }
+        })
+
+        vm.searchItemList.observe(this, Observer { result ->
+            when (result) {
+                is AppResult.Success -> updateList(result.data)
                 is AppResult.Failure -> displayFailureInfo(result.exception)
             }
         })
     }
 
-    private fun getData() {
+    private fun updateList(list: List<MovieTvShow>) {
+        loading_animation.pauseAnimation()
+        loading_animation.visibility = View.GONE
+        recycler_view.visibility = View.VISIBLE
+        container_info.visibility = View.GONE
+
+        adapter.update(list)
+    }
+
+    private fun getData(isSearch: Boolean = false, query: String = "") {
+        recycler_view.visibility = View.GONE
         container_info.visibility = View.GONE
         loading_animation.resumeAnimation()
         loading_animation.visibility = View.VISIBLE
 
         when(listType) {
-            ListType.MOVIE -> vm.getMovies(isFavorite)
-            ListType.TVSHOW -> vm.getTvShow(isFavorite)
+            ListType.MOVIE -> {
+                if (isSearch) vm.searchMovie(query) else vm.getMovies(isFavorite)
+            }
+            ListType.TVSHOW -> {
+                if (isSearch) vm.searchMovie(query) else vm.getTvShow(isFavorite)
+            }
         }
     }
 
@@ -122,5 +157,14 @@ open class MovieTvListFragment : Fragment() {
         }
 
         btn_info.setOnClickListener { getData() }
+    }
+
+    @Subscribe
+    fun onSearchEvent(e: SearchEvent<Any>) {
+        when(e) {
+            is SearchEvent.Started -> adapter.update(emptyList())
+            is SearchEvent.Query -> getData(true, e.text)
+            is SearchEvent.Closed -> adapter.update(listMovies)
+        }
     }
 }

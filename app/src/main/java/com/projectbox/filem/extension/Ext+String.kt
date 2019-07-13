@@ -8,7 +8,9 @@ import java.util.*
  */
 fun String.convertToReadableDate(): String {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-    val date = sdf.parse(this)
+    var date = Date(0)
+    if (this.isNotEmpty())
+        date = sdf.parse(this)
     val convertSdf = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
     return convertSdf.format(date)
 }

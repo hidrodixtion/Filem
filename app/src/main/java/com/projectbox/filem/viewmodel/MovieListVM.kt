@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
  */
 class MovieListVM(private val repo: MovieRepository) : ViewModel() {
     val itemList: MutableLiveData<AppResult<List<MovieTvShow>>> = MutableLiveData()
+    val searchItemList: MutableLiveData<AppResult<List<MovieTvShow>>> = MutableLiveData()
 
     fun getMovies(isFavorite: Boolean = false) {
         viewModelScope.launch {
@@ -33,6 +34,30 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
                 itemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 itemList.value = AppResult.Failure(e)
+            }
+        }
+    }
+
+    fun searchMovie(query: String) {
+        viewModelScope.launch {
+            try {
+//                val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
+                val result = repo.searchMovie(query)
+                searchItemList.value = AppResult.Success(result)
+            } catch (e: Exception) {
+                searchItemList.value = AppResult.Failure(e)
+            }
+        }
+    }
+
+    fun searchTvShow(query: String) {
+        viewModelScope.launch {
+            try {
+//            val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
+                val result = repo.searchTvShow(query)
+                searchItemList.value = AppResult.Success(result)
+            } catch (e: Exception) {
+                searchItemList.value = AppResult.Failure(e)
             }
         }
     }
