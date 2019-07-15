@@ -85,4 +85,9 @@ class MovieRepository(private val service: IService, private val dao: FavoriteDa
         val defer = async { dao.searchTvShowFav("'%$query%'") }
         defer.await()
     }
+
+    suspend fun getMovieDetail(id: String): MovieTvShow = coroutineScope {
+        val defer = async { dao.getMovieDetail(id) }
+        defer.await()
+    }
 }

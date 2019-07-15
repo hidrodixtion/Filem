@@ -16,7 +16,8 @@ import java.lang.Exception
  */
 class MovieDetailVM(private val repo: MovieRepository) : ViewModel() {
     val castList = MutableLiveData<AppResult<List<Cast>>>()
-    val isFavorite: MutableLiveData<Boolean> = MutableLiveData()
+    val isFavorite = MutableLiveData<Boolean>()
+    val movieDetail = MutableLiveData<MovieTvShow>()
 
     fun getCast(type: ListType, id: String) {
         viewModelScope.launch {
@@ -29,6 +30,13 @@ class MovieDetailVM(private val repo: MovieRepository) : ViewModel() {
             } catch (e: Exception) {
                 castList.value = AppResult.Failure(e)
             }
+        }
+    }
+
+    fun getDetail(id: String) {
+        viewModelScope.launch {
+            val movie = repo.getMovieDetail(id)
+            movieDetail.value = movie
         }
     }
 

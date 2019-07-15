@@ -36,8 +36,16 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_movie_detail)
 
         initUi()
-        fillFields()
-        getMoreData()
+        initListeners()
+
+        if (intent.hasExtra("data")) {
+            fillFields()
+            getMoreData()
+        }
+
+        if (intent.hasExtra("id")) {
+            vm.getDetail(intent.getStringExtra("id"))
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -77,13 +85,12 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun fillFields() {
-        if (!intent.hasExtra("data"))
-            return
-
         if (intent.hasExtra("type"))
             type = ListType.valueOf(intent.getStringExtra("type"))
 
-        data = intent.getParcelableExtra("data")
+        if (::data.isInitialized.not())
+            data = intent.getParcelableExtra("data")
+
         data.movieTitle?.let {
             txt_title.text = it
         }
@@ -110,7 +117,7 @@ class MovieDetailActivity : AppCompatActivity() {
         Glide.with(this).load(posterUrl).into(img_header)
     }
 
-    private fun getMoreData() {
+    private fun initListeners() {
         vm.castList.observe(this, Observer { result ->
             preloader.pauseAnimation()
             preloader.visibility = View.GONE
@@ -140,6 +147,14 @@ class MovieDetailActivity : AppCompatActivity() {
             isFavorite = faved
         })
 
+        vm.movieDetail.observe(this, Observer { movie ->
+            data = movie
+            fillFields()
+            getMoreData()
+        })
+    }
+
+    private fun getMoreData() {
         if (::data.isInitialized) {
             vm.getCast(type, data.id)
             vm.isFavorited(data.id)

@@ -7,6 +7,7 @@ import com.projectbox.filem.service.ConnectivityInterceptor
 import com.projectbox.filem.service.IService
 import com.projectbox.filem.viewmodel.MovieDetailVM
 import com.projectbox.filem.viewmodel.MovieListVM
+import com.projectbox.filem.widget.StackViewAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,6 +30,8 @@ class KoinModules {
         factory { get<AppDB>().favoriteDao() }
 
         factory { MovieRepository(get(), get()) }
+
+        factory { StackViewAdapterFactory(get(), get()) }
 
         viewModel { MovieListVM(get()) }
         viewModel { MovieDetailVM(get()) }
