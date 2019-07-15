@@ -26,6 +26,18 @@ class MovieRepository(private val service: IService, private val dao: FavoriteDa
         response.results
     }
 
+    suspend fun searchMovie(query: String): List<MovieTvShow> = coroutineScope {
+        val defer = async { service.searchMovie(query) }
+        val response = defer.await()
+        response.results
+    }
+
+    suspend fun searchTvShow(query: String): List<MovieTvShow> = coroutineScope {
+        val defer = async { service.searchTvShow(query) }
+        val response = defer.await()
+        response.results
+    }
+
     suspend fun getMovieCast(movieId: String): List<Cast> = coroutineScope {
         val defer = async { service.getMovieCredit(movieId)}
         val response = defer.await()
@@ -58,9 +70,19 @@ class MovieRepository(private val service: IService, private val dao: FavoriteDa
         defer.await()
     }
 
-    suspend fun isFavorite(id: String) = coroutineScope {
+    suspend fun isFavorite(id: String): Boolean = coroutineScope {
         val defer = async { dao.isFavorite(id) }
         val result = defer.await()
         result == 1
+    }
+
+    suspend fun searchFavoriteMovie(query: String): List<MovieTvShow> = coroutineScope {
+        val defer = async { dao.searchMovieFav(query) }
+        defer.await()
+    }
+
+    suspend fun searchFavoriteTvShow(query: String): List<MovieTvShow> = coroutineScope {
+        val defer = async { dao.searchTvShowFav("'%$query%'") }
+        defer.await()
     }
 }

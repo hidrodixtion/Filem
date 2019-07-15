@@ -1,11 +1,11 @@
 package com.projectbox.filem
 
-import com.projectbox.filem.model.Movie
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -31,7 +31,7 @@ class MovieRepoTest : AutoCloseKoinTest() {
         declareMock<MovieRepository> {
             given(
                 runBlocking { getMovieList() }
-            ).will { emptyList<Movie>() }
+            ).will { emptyList<MovieTvShow>() }
 
             given(
                 runBlocking { getTvShowList() }
@@ -41,7 +41,7 @@ class MovieRepoTest : AutoCloseKoinTest() {
 
     @Test
     fun `test movie repo is not null`() {
-        assertNotNull(movieRepo)
+        assertNull(movieRepo)
     }
 
     @Test

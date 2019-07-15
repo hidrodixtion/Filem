@@ -41,24 +41,31 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        setResult(100)
         finish()
-        return super.onSupportNavigateUp()
+        return true//super.onSupportNavigateUp()
     }
 
     private fun initUi() {
         setSupportActionBar(toolbar)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.ic_back)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
-        collapsing_toolbar.title = resources.getString(R.string.title_detail_movie)
-        collapsing_toolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.white))
-        collapsing_toolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent))
-
-        recycler_view_cast.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recycler_view_cast.setHasFixedSize(true)
+        collapsing_toolbar.apply {
+            title = resources.getString(R.string.title_detail_movie)
+            setCollapsedTitleTextColor(ContextCompat.getColor(this@MovieDetailActivity, android.R.color.white))
+            setExpandedTitleColor(ContextCompat.getColor(this@MovieDetailActivity, android.R.color.transparent))
+        }
 
         adapter = CastAdapter(emptyList())
-        recycler_view_cast.adapter = adapter
+
+        recycler_view_cast.apply {
+            layoutManager = LinearLayoutManager(this@MovieDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = adapter
+        }
 
         fab_favorite.setOnClickListener {
             if (isFavorite) {
