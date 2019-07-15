@@ -28,8 +28,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var searchView: SearchView
-    lateinit var searchMenuItem: MenuItem
+    private lateinit var searchMenuItem: MenuItem
     var searchQuery = ""
+    private var isSearchHidden = false
+    private var selectedItem = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,8 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.setting, menu)
 
         searchMenuItem = menu.findItem(R.id.search)
+        if (isSearchHidden)
+            searchMenuItem.isVisible = false
         searchView = menu.findItem(R.id.search).actionView as SearchView
 
         initSearchView()
@@ -111,17 +115,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val onBottomNavSelected = BottomNavigationView.OnNavigationItemSelectedListener {
+        if (selectedItem == it.itemId)
+            return@OnNavigationItemSelectedListener false
+
+        isSearchHidden = false
         when (it.itemId) {
             R.id.menu_movie -> refreshFragmentContainer(ListType.MOVIE)
             R.id.menu_tv -> refreshFragmentContainer(ListType.TVSHOW)
-            R.id.menu_favorite -> refreshFragmentContainer(ListType.MOVIE, true)
+            R.id.menu_favorite -> {
+                isSearchHidden = true
+                refreshFragmentContainer(ListType.MOVIE, true)
+            }
         }
+
+        selectedItem = it.itemId
+        invalidateOptionsMenu()
         return@OnNavigationItemSelectedListener true
     }
 
     private val onTabSelected = object : TabLayout.OnTabSelectedListener {
         override fun onTabReselected(tabItem: TabLayout.Tab?) {}
-
         override fun onTabUnselected(tabItem: TabLayout.Tab?) {}
 
         override fun onTabSelected(tabItem: TabLayout.Tab?) {
@@ -141,7 +154,6 @@ class MainActivity : AppCompatActivity() {
         tab.apply {
             addTab(tab.newTab().setText(resources.getString(R.string.menu_movie)))
             addTab(tab.newTab().setText(resources.getString(R.string.menu_tv)))
-            addOnTabSelectedListener(onTabSelected)
         }
     }
 
@@ -175,10 +187,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshFragmentContainer(listType: ListType, isShowingFavorite: Boolean = false) {
-        if (isShowingFavorite)
+        tab.clearOnTabSelectedListeners()
+        if (isShowingFavorite) {
             tab.visibility = View.VISIBLE
-        else
+            tab.addOnTabSelectedListener(onTabSelected)
+        } else {
             tab.visibility = View.GONE
+            tab.getTabAt(0)?.select()
+        }
 
         restoreSearchView()
         supportFragmentManager.beginTransaction()

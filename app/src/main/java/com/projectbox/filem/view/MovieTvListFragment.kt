@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,8 +22,6 @@ import kotlinx.android.synthetic.main.exception_info.*
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.startActivityForResult
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -77,10 +74,10 @@ open class MovieTvListFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == 100 && isFavorite) {
-//            getData()
-//        }
+//        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && isFavorite) {
+            getData()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -110,7 +107,10 @@ open class MovieTvListFragment : Fragment() {
 
     private fun initList() {
         adapter = MovieTvAdapter(emptyList()) { item ->
-            activity?.startActivityForResult<MovieDetailActivity>(100, "data" to item, "type" to listType.name)
+            val intent = Intent(this.activity, MovieDetailActivity::class.java)
+            intent.putExtra("data", item)
+            intent.putExtra("type", listType.name)
+            startActivityForResult(intent, 100)
         }
 
         recycler_view.layoutManager = LinearLayoutManager(this.activity)

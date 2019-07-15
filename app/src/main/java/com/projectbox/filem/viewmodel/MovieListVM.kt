@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
-import com.projectbox.filem.service.NoConnectivityException
-import com.projectbox.filem.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 /**
