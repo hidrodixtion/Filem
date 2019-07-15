@@ -1,6 +1,7 @@
 package com.projectbox.filem.view
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_movie_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -34,6 +36,7 @@ open class MovieTvListFragment : Fragment() {
     companion object {
         const val LIST_TYPE = "list_type_key"
         const val IS_FAVORITE = "is_favorite_key"
+        const val IS_SEARCH = "is_search_key"
 
         fun getInstance(listType: ListType, isFavorite: Boolean = false): MovieTvListFragment {
             val bundle = Bundle()
@@ -51,6 +54,7 @@ open class MovieTvListFragment : Fragment() {
     private var listType = ListType.MOVIE
     private var isFavorite = false
     private var listMovies = emptyList<MovieTvShow>()
+    private var isSearch = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
@@ -63,14 +67,25 @@ open class MovieTvListFragment : Fragment() {
         initList()
         initListeners()
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             getData()
+        } else {
+            if (savedInstanceState.containsKey(IS_SEARCH)) {
+                isSearch = savedInstanceState.getBoolean(IS_SEARCH)
+            }
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isFavorite)
-            getData()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == 100 && isFavorite) {
+//            getData()
+//        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_SEARCH, isSearch)
     }
 
     override fun onStart() {
@@ -95,7 +110,7 @@ open class MovieTvListFragment : Fragment() {
 
     private fun initList() {
         adapter = MovieTvAdapter(emptyList()) { item ->
-            activity?.startActivity<MovieDetailActivity>("data" to item, "type" to listType.name)
+            activity?.startActivityForResult<MovieDetailActivity>(100, "data" to item, "type" to listType.name)
         }
 
         recycler_view.layoutManager = LinearLayoutManager(this.activity)
@@ -114,6 +129,8 @@ open class MovieTvListFragment : Fragment() {
         })
 
         vm.searchItemList.observe(this, Observer { result ->
+            if (!isSearch) return@Observer
+
             when (result) {
                 is AppResult.Success -> updateList(result.data)
                 is AppResult.Failure -> displayFailureInfo(result.exception)
@@ -131,6 +148,7 @@ open class MovieTvListFragment : Fragment() {
     }
 
     private fun getData(isSearch: Boolean = false, query: String = "") {
+        this.isSearch = isSearch
         recycler_view.visibility = View.GONE
         container_info.visibility = View.GONE
         loading_animation.resumeAnimation()
@@ -138,10 +156,16 @@ open class MovieTvListFragment : Fragment() {
 
         when(listType) {
             ListType.MOVIE -> {
-                if (isSearch) vm.searchMovie(query) else vm.getMovies(isFavorite)
+                if (isSearch)
+                    vm.searchMovie(query, isFavorite)
+                else
+                    vm.getMovies(isFavorite)
             }
             ListType.TVSHOW -> {
-                if (isSearch) vm.searchMovie(query) else vm.getTvShow(isFavorite)
+                if (isSearch)
+                    vm.searchTvShow(query, isFavorite)
+                else
+                    vm.getTvShow(isFavorite)
             }
         }
     }
@@ -164,7 +188,10 @@ open class MovieTvListFragment : Fragment() {
         when(e) {
             is SearchEvent.Started -> adapter.update(emptyList())
             is SearchEvent.Query -> getData(true, e.text)
-            is SearchEvent.Closed -> adapter.update(listMovies)
+            is SearchEvent.Closed -> {
+                isSearch = false
+                adapter.update(listMovies)
+            }
         }
     }
 }

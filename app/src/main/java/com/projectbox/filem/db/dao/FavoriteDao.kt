@@ -15,6 +15,12 @@ interface FavoriteDao {
     @Query("SELECT * FROM MovieTvShow WHERE firstAirDate is not null")
     suspend fun getTvFav(): List<MovieTvShow>
 
+    @Query("SELECT * FROM MovieTvShow WHERE movieTitle IS NOT NULL AND movieTitle LIKE '%' || :query || '%'")
+    suspend fun searchMovieFav(query: String): List<MovieTvShow>
+
+    @Query("SELECT * FROM MovieTvShow WHERE showTitle IS NOT NULL AND showTitle LIKE :query")
+    suspend fun searchTvShowFav(query: String): List<MovieTvShow>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFav(data: MovieTvShow)
 

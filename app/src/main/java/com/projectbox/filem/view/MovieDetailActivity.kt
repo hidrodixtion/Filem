@@ -41,6 +41,7 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        setResult(100)
         finish()
         return super.onSupportNavigateUp()
     }

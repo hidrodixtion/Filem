@@ -15,11 +15,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.SearchResultActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.SEARCH"/>-->
-            <!--</intent-filter>-->
-        </activity>
         <activity
                 android:name=".view.MovieDetailActivity"
                 android:theme="@style/NoAppBar"/>

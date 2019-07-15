@@ -80,7 +80,9 @@ class MainActivity : AppCompatActivity() {
         outState.apply {
             putInt(SELECTED_MENU, bottom_navigation.selectedItemId)
             putInt(SELECTED_TAB, tab.selectedTabPosition)
-            putString(SEARCH_QUERY, searchView.query.toString())
+
+            if (::searchView.isInitialized && ::searchMenuItem.isInitialized && searchMenuItem.isActionViewExpanded)
+                putString(SEARCH_QUERY, searchQuery)
         }
     }
 
@@ -164,6 +166,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                searchQuery = ""
+                searchView.setQuery("", false)
                 EventBus.getDefault().post(SearchEvent.Closed())
                 return true
             }

@@ -16,10 +16,10 @@ interface IService {
     @GET("discover/tv")
     suspend fun getTvShowList(): MovieTvShowResponse
 
-    @GET("search/movie?year=2019")
+    @GET("search/movie")
     suspend fun searchMovie(@Query("query") query: String): MovieTvShowResponse
 
-    @GET("search/tv?year=2019")
+    @GET("search/tv")
     suspend fun searchTvShow(@Query("query") query: String): MovieTvShowResponse
 
     @GET("movie/{movieId}/credits")

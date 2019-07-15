@@ -7,14 +7,15 @@ import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.service.NoConnectivityException
+import com.projectbox.filem.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 /**
  * Created by adinugroho
  */
 class MovieListVM(private val repo: MovieRepository) : ViewModel() {
-    val itemList: MutableLiveData<AppResult<List<MovieTvShow>>> = MutableLiveData()
-    val searchItemList: MutableLiveData<AppResult<List<MovieTvShow>>> = MutableLiveData()
+    val itemList = MutableLiveData<AppResult<List<MovieTvShow>>>()
+    val searchItemList = MutableLiveData<AppResult<List<MovieTvShow>>>()
 
     fun getMovies(isFavorite: Boolean = false) {
         viewModelScope.launch {
@@ -38,11 +39,10 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
         }
     }
 
-    fun searchMovie(query: String) {
+    fun searchMovie(query: String, isFavorite: Boolean = false) {
         viewModelScope.launch {
             try {
-//                val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
-                val result = repo.searchMovie(query)
+                val result = if (isFavorite) repo.searchFavoriteMovie(query) else repo.searchMovie(query)
                 searchItemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 searchItemList.value = AppResult.Failure(e)
@@ -50,11 +50,10 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
         }
     }
 
-    fun searchTvShow(query: String) {
+    fun searchTvShow(query: String, isFavorite: Boolean = false) {
         viewModelScope.launch {
             try {
-//            val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
-                val result = repo.searchTvShow(query)
+                val result = if (isFavorite) repo.searchFavoriteTvShow(query) else repo.searchTvShow(query)
                 searchItemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 searchItemList.value = AppResult.Failure(e)

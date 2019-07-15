@@ -51,7 +51,11 @@ class KoinModules {
             val original = chain.request()
             val originalUrl = original.url()
 
-            val url = originalUrl.newBuilder().addQueryParameter("api_key", apiKey).build()
+            val url = originalUrl.newBuilder()
+                .addQueryParameter("api_key", apiKey)
+                .addQueryParameter("language", "en-US")
+                .addQueryParameter("year", "2019")
+                .build()
             val requestBuilder = original.newBuilder().url(url)
             val request = requestBuilder.build()
 
