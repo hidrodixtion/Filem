@@ -20,4 +20,13 @@
     <string name="removed_from_fave">Telah dihapus dari favorit</string>
     <string name="appwidget_text">Film Favorit</string>
     <string name="add_widget">Tambah Widget</string>
+    <string name="app_setting">Pengaturan Aplikasi</string>
+    <string name="daily_reminder">Pemberitahuan harian</string>
+    <string name="language">Bahasa</string>
+    <string name="new_release_reminder">Pemberitahuan rilis terbaru</string>
+    <string name="notifications_setting">Penagaturan Pemberitahuan</string>
+    <string name="settings">Pengaturan</string>
+    <string name="content_daily_reminder">Hai. Jangan lupa buat buka app Filem hari ini ya!</string>
+    <string name="title_new_release">Film Terbaru HARI INI!</string>
+    <string name="content_new_release">Film %s baru saja dirilis. Klik untuk membuka info.</string>
 </resources>

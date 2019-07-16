@@ -17,6 +17,7 @@ import com.projectbox.filem.event.SearchEvent
 import com.projectbox.filem.model.ListType
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.setting, menu)
+        menuInflater.inflate(R.menu.main, menu)
 
         searchMenuItem = menu.findItem(R.id.search)
         if (isSearchHidden)
@@ -105,10 +106,7 @@ class MainActivity : AppCompatActivity() {
         val selectedItem = item ?: return false
 
         when (selectedItem.itemId) {
-            R.id.menu_change_language -> {
-                val intent = Intent(Settings.ACTION_LOCALE_SETTINGS)
-                startActivity(intent)
-            }
+            R.id.menu_setting -> startActivity<SettingActivity>()
         }
 
         return super.onOptionsItemSelected(item)

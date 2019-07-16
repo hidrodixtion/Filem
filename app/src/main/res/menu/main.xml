@@ -6,8 +6,8 @@
           android:icon="@drawable/ic_search"
           app:showAsAction="collapseActionView|always"
           app:actionViewClass="android.widget.SearchView"/>
-    <item android:id="@+id/menu_change_language"
+    <item android:id="@+id/menu_setting"
           app:showAsAction="always"
-          android:icon="@drawable/ic_language_white"
-          android:title="@string/menu_change_language"/>
+          android:icon="@drawable/ic_settings"
+          android:title="@string/settings"/>
 </menu>

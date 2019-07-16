@@ -1,10 +1,12 @@
 package com.projectbox.filem
 
 import android.content.Context
+import com.projectbox.filem.alarm.ReminderReceiver
 import com.projectbox.filem.db.AppDB
 import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.service.ConnectivityInterceptor
 import com.projectbox.filem.service.IService
+import com.projectbox.filem.util.TinyDB
 import com.projectbox.filem.viewmodel.MovieDetailVM
 import com.projectbox.filem.viewmodel.MovieListVM
 import com.projectbox.filem.widget.StackViewAdapterFactory
@@ -26,12 +28,12 @@ class KoinModules {
         single { createRetrofitClient(get(), getProperty("API_KEY"), get()) }
         single { createService(get(), getProperty("BASE_URL")) }
         single { AppDB.getDatabase(get()) }
+        single { TinyDB(get()) }
 
         factory { get<AppDB>().favoriteDao() }
-
         factory { MovieRepository(get(), get()) }
-
         factory { StackViewAdapterFactory(get(), get()) }
+        factory { ReminderReceiver() }
 
         viewModel { MovieListVM(get()) }
         viewModel { MovieDetailVM(get()) }

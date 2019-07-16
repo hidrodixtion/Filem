@@ -6,6 +6,8 @@ import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.IService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by adinugroho
@@ -89,5 +91,17 @@ class MovieRepository(private val service: IService, private val dao: FavoriteDa
     suspend fun getMovieDetail(id: String): MovieTvShow = coroutineScope {
         val defer = async { dao.getMovieDetail(id) }
         defer.await()
+    }
+
+    suspend fun getRecentRelease(): List<MovieTvShow> = coroutineScope {
+        val now = Date()
+        val strNow = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(now)
+        val defer = async { service.getRecentRelease(strNow, strNow) }
+        val response = defer.await()
+        val list = response.results
+        var maxSize = 5
+        if (list.size < maxSize)
+            maxSize = list.size
+        list.subList(0, maxSize)
     }
 }
