@@ -171,7 +171,10 @@ open class MovieTvListFragment : Fragment() {
     }
 
     private fun displayFailureInfo(ex: Exception) {
+        loading_animation.pauseAnimation()
+        loading_animation.visibility = View.GONE
         container_info.visibility = View.VISIBLE
+
         if (ex is NoConnectivityException) {
             txt_info.text = resources.getString(R.string.info_no_connection)
             icon_info.setImageDrawable(ContextCompat.getDrawable(this.context!!, R.drawable.ic_no_connection))

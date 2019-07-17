@@ -28,6 +28,6 @@ interface IService {
     @GET("tv/{tvId}/credits")
     suspend fun getTvCredit(@Path("tvId") tvId: String): CastResponse
 
-    @GET("discover/movie?page=1&sort_by=popularity.asc")
+    @GET("discover/movie?page=1&sort_by=popularity.desc")
     suspend fun getRecentRelease(@Query("primary_release_date.lte") start: String, @Query("primary_release_date.gte") end: String): MovieTvShowResponse
 }
