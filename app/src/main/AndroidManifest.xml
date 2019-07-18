@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <permission android:name="com.projectbox.filem.READ"
+                android:protectionLevel="normal"/>
 
     <application
             android:name=".App"
@@ -15,12 +18,20 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <provider
+                android:name=".provider.FavoriteProvider"
+                android:authorities="com.projectbox.filem"
+                android:enabled="true"
+                android:exported="true"
+                android:readPermission="com.projectbox.filem.READ">
+        </provider>
+
         <activity android:name=".view.SettingActivity"/>
 
-        <receiver android:name=".alarm.ReminderReceiver"
-                  android:enabled="true"
-                  android:exported="true"/>
-
+        <receiver
+                android:name=".alarm.ReminderReceiver"
+                android:enabled="true"
+                android:exported="true"/>
         <receiver android:name=".widget.FavoriteMovieWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
