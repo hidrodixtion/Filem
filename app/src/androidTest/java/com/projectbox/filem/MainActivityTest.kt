@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class MainActivityTest {
     @Rule
     @JvmField val activityRule = ActivityTestRule(MainActivity::class.java)
 
@@ -33,7 +33,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun testClickItemInList() {
-        val listview = onView(allOf(isDisplayed(), withId(R.id.list_view)))
+        val listview = onView(allOf(isDisplayed(), withId(R.id.recycler_view)))
         listview.check(matches(isDisplayed()))
     }
 }
