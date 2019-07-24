@@ -14,6 +14,7 @@ import com.projectbox.filem.adapter.MovieTvAdapter
 import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.ListType
 import com.projectbox.filem.service.NoConnectivityException
+import com.projectbox.filem.util.IdlingResourceUtil
 import com.projectbox.filem.viewmodel.MovieListVM
 import kotlinx.android.synthetic.main.exception_info.*
 import kotlinx.android.synthetic.main.fragment_movie_list.*
@@ -82,6 +83,7 @@ open class MovieTvListFragment : Fragment() {
                 is AppResult.Success -> adapter.update(result.data)
                 is AppResult.Failure -> displayFailureInfo(result.exception)
             }
+            IdlingResourceUtil.decrement()
         })
 
         getData()
@@ -92,6 +94,7 @@ open class MovieTvListFragment : Fragment() {
         loading_animation.resumeAnimation()
         loading_animation.visibility = View.VISIBLE
 
+        IdlingResourceUtil.increment()
         when(listType) {
             ListType.MOVIE -> vm.getMovies()
             ListType.TVSHOW -> vm.getTvShow()
