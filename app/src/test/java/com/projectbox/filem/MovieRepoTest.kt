@@ -1,12 +1,16 @@
 package com.projectbox.filem
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
+import com.projectbox.filem.util.observeOnce
+import com.projectbox.filem.viewmodel.MovieListVM
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.AutoCloseKoinTest
@@ -15,12 +19,26 @@ import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+
 /**
  * Created by adinugroho
  */
 class MovieRepoTest : AutoCloseKoinTest() {
 
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+
     private val movieRepo: MovieRepository by inject()
+
+    private val movieListVM: MovieListVM by inject()
 
     private val aMovieMock = MovieTvShow(
         id = "123",
@@ -36,6 +54,8 @@ class MovieRepoTest : AutoCloseKoinTest() {
 
     @Before
     fun before() {
+        Dispatchers.setMain(mainThreadSurrogate)
+
         startKoin {
             modules(KoinModules().appModules)
         }
@@ -49,6 +69,11 @@ class MovieRepoTest : AutoCloseKoinTest() {
                 runBlocking { getTvShowList() }
             ).will { listOf(aMovieMock) }
         }
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -75,6 +100,30 @@ class MovieRepoTest : AutoCloseKoinTest() {
             Mockito.verify(movieRepo).getTvShowList()
             assertNotNull(list)
             assertEquals(1, list.size)
+        }
+    }
+
+    @Test
+    fun `test get movie list from VM has 1 item`() {
+        movieListVM.getMovies()
+        movieListVM.itemList.observeOnce {
+            assertThat(it is AppResult.Success).isTrue()
+
+            when(it) {
+                is AppResult.Success -> assertEquals(1, it.data.size)
+            }
+        }
+    }
+
+    @Test
+    fun `test get tvshow list from VM has 1 item`() {
+        movieListVM.getTvShow()
+        movieListVM.itemList.observeOnce {
+            assertThat(it is AppResult.Success).isTrue()
+
+            when(it) {
+                is AppResult.Success -> assertEquals(1, it.data.size)
+            }
         }
     }
 }
