@@ -25,6 +25,7 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.mockito.BDDMockito.verify
 
 /**
  * Created by adinugroho
@@ -106,6 +107,7 @@ class MovieRepoTest : AutoCloseKoinTest() {
     @Test
     fun `test get movie list from VM has 1 item`() {
         movieListVM.getMovies()
+
         movieListVM.itemList.observeOnce {
             assertThat(it is AppResult.Success).isTrue()
 

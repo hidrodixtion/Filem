@@ -15,4 +15,6 @@
     <string name="info_problem">Something is wrong. Please try again later.</string>
     <string name="try_again">Try Again</string>
     <string name="cast">Cast</string>
+    <string name="header_image">Header image</string>
+    <string name="movie_poster">Movie poster</string>
 </resources>

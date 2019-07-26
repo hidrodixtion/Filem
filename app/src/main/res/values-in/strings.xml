@@ -15,4 +15,6 @@
     <string name="info_problem">Terjadi kesalahan. Mohon coba lagi.</string>
     <string name="try_again">Coba Lagi</string>
     <string name="cast">Pemain</string>
+    <string name="header_image">Gambar bagian header</string>
+    <string name="movie_poster">Poster film</string>
 </resources>

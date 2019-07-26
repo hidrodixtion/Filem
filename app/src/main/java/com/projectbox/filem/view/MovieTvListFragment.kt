@@ -41,8 +41,8 @@ open class MovieTvListFragment : Fragment() {
 
     private val vm by viewModel<MovieListVM>()
 
-    lateinit var adapter: MovieTvAdapter
-    var listType = ListType.MOVIE
+    private lateinit var adapter: MovieTvAdapter
+    private var listType = ListType.MOVIE
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
