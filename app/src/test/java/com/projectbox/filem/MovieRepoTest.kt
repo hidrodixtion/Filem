@@ -1,11 +1,8 @@
 package com.projectbox.filem
 
-<<<<<<< HEAD
-=======
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.projectbox.filem.model.AppResult
->>>>>>> jetpack_submission_1
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
 import com.projectbox.filem.util.observeOnce
@@ -17,9 +14,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,11 +62,7 @@ class MovieRepoTest : AutoCloseKoinTest() {
         declareMock<MovieRepository> {
             given(
                 runBlocking { getMovieList() }
-<<<<<<< HEAD
-            ).will { emptyList<MovieTvShow>() }
-=======
             ).will { listOf(aMovieMock) }
->>>>>>> jetpack_submission_1
 
             given(
                 runBlocking { getTvShowList() }

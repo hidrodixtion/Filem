@@ -50,12 +50,9 @@ open class MovieTvListFragment : Fragment() {
 
     private lateinit var adapter: MovieTvAdapter
     private var listType = ListType.MOVIE
-<<<<<<< HEAD
     private var isFavorite = false
     private var listMovies = emptyList<MovieTvShow>()
     private var isSearch = false
-=======
->>>>>>> jetpack_submission_1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
