@@ -15,6 +15,7 @@
     <string name="info_problem">Something is wrong. Please try again later.</string>
     <string name="try_again">Try Again</string>
     <string name="cast">Cast</string>
+<<<<<<< HEAD
     <string name="favorites">Favorites</string>
     <string name="added_to_fave">Added to favorite</string>
     <string name="removed_from_fave">Removed from favorite</string>
@@ -29,4 +30,9 @@
     <string name="content_daily_reminder">Hi! Don\'t forget to open Filem app today.</string>
     <string name="title_new_release">New Release TODAY!</string>
     <string name="content_new_release">%s released today. Tap for more info.</string>
+=======
+    <string name="header_image">Header image</string>
+    <string name="movie_poster">Movie poster</string>
+    <string name="warning_image">Warning Image</string>
+>>>>>>> jetpack_submission_1
 </resources>

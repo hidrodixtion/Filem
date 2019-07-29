@@ -54,7 +54,7 @@ class KoinModules {
 
         exisitingBuilder.addInterceptor { chain ->
             val original = chain.request()
-            val originalUrl = original.url()
+            val originalUrl = original.url
 
             val url = originalUrl.newBuilder()
                 .addQueryParameter("api_key", apiKey)

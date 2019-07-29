@@ -6,6 +6,7 @@
               android:gravity="center">
 
     <ImageView
+            android:contentDescription="@string/warning_image"
             android:id="@+id/icon_info"
             android:layout_width="128dp"
             android:layout_height="128dp"

@@ -17,6 +17,7 @@ import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.ListType
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.service.NoConnectivityException
+import com.projectbox.filem.util.IdlingResourceUtil
 import com.projectbox.filem.viewmodel.MovieListVM
 import kotlinx.android.synthetic.main.exception_info.*
 import kotlinx.android.synthetic.main.fragment_movie_list.*
@@ -49,9 +50,12 @@ open class MovieTvListFragment : Fragment() {
 
     private lateinit var adapter: MovieTvAdapter
     private var listType = ListType.MOVIE
+<<<<<<< HEAD
     private var isFavorite = false
     private var listMovies = emptyList<MovieTvShow>()
     private var isSearch = false
+=======
+>>>>>>> jetpack_submission_1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
@@ -126,6 +130,7 @@ open class MovieTvListFragment : Fragment() {
                 }
                 is AppResult.Failure -> displayFailureInfo(result.exception)
             }
+            IdlingResourceUtil.decrement()
         })
 
         vm.searchItemList.observe(this, Observer { result ->
@@ -154,6 +159,7 @@ open class MovieTvListFragment : Fragment() {
         loading_animation.resumeAnimation()
         loading_animation.visibility = View.VISIBLE
 
+        IdlingResourceUtil.increment()
         when(listType) {
             ListType.MOVIE -> {
                 if (isSearch)
