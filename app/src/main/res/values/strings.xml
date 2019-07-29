@@ -17,4 +17,5 @@
     <string name="cast">Cast</string>
     <string name="header_image">Header image</string>
     <string name="movie_poster">Movie poster</string>
+    <string name="warning_image">Warning Image</string>
 </resources>

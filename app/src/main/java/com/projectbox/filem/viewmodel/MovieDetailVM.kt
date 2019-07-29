@@ -8,7 +8,6 @@ import com.projectbox.filem.model.Cast
 import com.projectbox.filem.model.ListType
 import com.projectbox.filem.repository.MovieRepository
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 /**
  * Created by adinugroho
