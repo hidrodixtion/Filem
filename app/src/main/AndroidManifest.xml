@@ -28,23 +28,23 @@
 
         <activity android:name=".view.SettingActivity"/>
 
-        <receiver
-                android:name=".alarm.ReminderReceiver"
-                android:enabled="true"
-                android:exported="true"/>
-        <receiver android:name=".widget.FavoriteMovieWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
+        <!--<receiver-->
+                <!--android:name=".alarm.ReminderReceiver"-->
+                <!--android:enabled="true"-->
+                <!--android:exported="true"/>-->
+        <!--<receiver android:name=".widget.FavoriteMovieWidget">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>-->
+            <!--</intent-filter>-->
 
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/favorite_movie_widget_info"/>
-        </receiver>
+            <!--<meta-data-->
+                    <!--android:name="android.appwidget.provider"-->
+                    <!--android:resource="@xml/favorite_movie_widget_info"/>-->
+        <!--</receiver>-->
 
-        <service
-                android:name=".widget.StackViewService"
-                android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <!--<service-->
+                <!--android:name=".widget.StackViewService"-->
+                <!--android:permission="android.permission.BIND_REMOTEVIEWS"/>-->
 
         <activity
                 android:name=".view.MovieDetailActivity"
