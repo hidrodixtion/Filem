@@ -40,9 +40,9 @@ class StackViewAdapterFactory(private val context: Context, private val repo: Mo
     override fun getItemId(position: Int): Long = 0
 
     override fun onDataSetChanged() {
-        runBlocking {
-            favoriteMovies = repo.getFavoriteMovieList()
-        }
+//        runBlocking {
+//            favoriteMovies = repo.getFavoriteMovieList()
+//        }
     }
 
     override fun hasStableIds(): Boolean = false

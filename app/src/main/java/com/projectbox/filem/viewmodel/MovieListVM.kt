@@ -1,12 +1,15 @@
 package com.projectbox.filem.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.projectbox.filem.model.AppResult
 import com.projectbox.filem.model.MovieTvShow
 import com.projectbox.filem.repository.MovieRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * Created by adinugroho
@@ -15,10 +18,16 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
     val itemList = MutableLiveData<AppResult<List<MovieTvShow>>>()
     val searchItemList = MutableLiveData<AppResult<List<MovieTvShow>>>()
 
-    fun getMovies(isFavorite: Boolean = false) {
+    fun getFavMovies(): LiveData<PagedList<MovieTvShow>> {
+        return runBlocking {
+            repo.getFavoriteMovieList()
+        }
+    }
+
+    fun getMovies() {
         viewModelScope.launch {
             try {
-                val result = if (isFavorite) repo.getFavoriteMovieList() else repo.getMovieList()
+                val result = repo.getMovieList()
                 itemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 itemList.value = AppResult.Failure(e)
@@ -26,10 +35,16 @@ class MovieListVM(private val repo: MovieRepository) : ViewModel() {
         }
     }
 
-    fun getTvShow(isFavorite: Boolean = false) {
+    fun getFavTvShows(): LiveData<PagedList<MovieTvShow>> {
+        return runBlocking {
+            repo.getFavoriteTvList()
+        }
+    }
+
+    fun getTvShow() {
         viewModelScope.launch {
             try {
-                val result = if (isFavorite) repo.getFavoriteTvList() else repo.getTvShowList()
+                val result = repo.getTvShowList()
                 itemList.value = AppResult.Success(result)
             } catch (e: Exception) {
                 itemList.value = AppResult.Failure(e)

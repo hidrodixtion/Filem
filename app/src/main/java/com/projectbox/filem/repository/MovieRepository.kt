@@ -1,8 +1,12 @@
 package com.projectbox.filem.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.projectbox.filem.db.dao.FavoriteDao
 import com.projectbox.filem.model.Cast
 import com.projectbox.filem.model.MovieTvShow
+import com.projectbox.filem.model.MovieTvShowResponse
 import com.projectbox.filem.service.IService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -52,14 +56,14 @@ class MovieRepository(private val service: IService, private val dao: FavoriteDa
         response.cast
     }
 
-    suspend fun getFavoriteMovieList(): List<MovieTvShow> = coroutineScope {
+    suspend fun getFavoriteMovieList(): LiveData<PagedList<MovieTvShow>> = coroutineScope {
         val defer = async { dao.getMovieFav() }
-        defer.await()
+        LivePagedListBuilder(defer.await(), 10).build()
     }
 
-    suspend fun getFavoriteTvList(): List<MovieTvShow> = coroutineScope {
+    suspend fun getFavoriteTvList(): LiveData<PagedList<MovieTvShow>> = coroutineScope {
         val defer = async { dao.getTvFav() }
-        defer.await()
+        LivePagedListBuilder(defer.await(), 10).build()
     }
 
     suspend fun addToFavorite(item: MovieTvShow) = coroutineScope {

@@ -1,5 +1,6 @@
 package com.projectbox.filem.db.dao
 
+import androidx.paging.DataSource
 import androidx.room.*
 import com.projectbox.filem.model.MovieTvShow
 
@@ -10,13 +11,13 @@ import com.projectbox.filem.model.MovieTvShow
 interface FavoriteDao {
 
     @Query("SELECT * FROM MovieTvShow WHERE releaseDate is not null")
-    suspend fun getMovieFav(): List<MovieTvShow>
+    fun getMovieFav(): DataSource.Factory<Int, MovieTvShow>
 
     @Query("SELECT * FROM MovieTvShow WHERE firstAirDate is not null")
-    suspend fun getTvFav(): List<MovieTvShow>
+    fun getTvFav(): DataSource.Factory<Int, MovieTvShow>
 
     @Query("SELECT * FROM MovieTvShow WHERE movieTitle IS NOT NULL AND movieTitle LIKE '%' || :query || '%'")
-    suspend fun searchMovieFav(query: String): List<MovieTvShow>
+    fun searchMovieFav(query: String): List<MovieTvShow>
 
     @Query("SELECT * FROM MovieTvShow WHERE showTitle IS NOT NULL AND showTitle LIKE :query")
     suspend fun searchTvShowFav(query: String): List<MovieTvShow>

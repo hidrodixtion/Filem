@@ -55,9 +55,9 @@ class FavoriteProvider : ContentProvider(), CoroutineScope {
         var movies = emptyList<MovieTvShow>()
 
         if (uriMatcher.match(uri) == 1) {
-            movies = runBlocking {
-                movieRepo.getFavoriteMovieList()
-            }
+//            movies = runBlocking {
+//                movieRepo.getFavoriteMovieList()
+//            }
         }
 
         Timber.v(movies.size.toString())

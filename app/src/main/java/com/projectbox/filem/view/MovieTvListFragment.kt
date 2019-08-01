@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.projectbox.filem.R
+import com.projectbox.filem.adapter.FavoriteMovieTvAdapter
 import com.projectbox.filem.adapter.MovieTvAdapter
 import com.projectbox.filem.event.SearchEvent
 import com.projectbox.filem.model.AppResult
@@ -49,6 +51,7 @@ open class MovieTvListFragment : Fragment() {
     private val vm by viewModel<MovieListVM>()
 
     private lateinit var adapter: MovieTvAdapter
+    private lateinit var favAdapter: FavoriteMovieTvAdapter
     private var listType = ListType.MOVIE
     private var isFavorite = false
     private var listMovies = emptyList<MovieTvShow>()
@@ -107,20 +110,20 @@ open class MovieTvListFragment : Fragment() {
     }
 
     private fun initList() {
-        adapter = MovieTvAdapter(emptyList()) { item ->
-            val intent = Intent(this.activity, MovieDetailActivity::class.java)
-            intent.putExtra("data", item)
-            intent.putExtra("type", listType.name)
-            startActivityForResult(intent, 100)
-        }
-
         recycler_view.layoutManager = LinearLayoutManager(this.activity)
-        recycler_view.adapter = adapter
+
+        if (isFavorite) {
+            favAdapter = FavoriteMovieTvAdapter { openDetail(it) }
+            recycler_view.adapter = favAdapter
+        } else {
+            adapter = MovieTvAdapter(emptyList()) { openDetail(it) }
+            recycler_view.adapter = adapter
+        }
     }
 
     private fun initListeners() {
         vm.itemList.observe(this, Observer { result ->
-            when(result) {
+            when (result) {
                 is AppResult.Success -> {
                     listMovies = result.data
                     updateList(result.data)
@@ -141,12 +144,16 @@ open class MovieTvListFragment : Fragment() {
     }
 
     private fun updateList(list: List<MovieTvShow>) {
+        hideLoadingShowList()
+
+        adapter.update(list)
+    }
+
+    private fun hideLoadingShowList() {
         loading_animation.pauseAnimation()
         loading_animation.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
         container_info.visibility = View.GONE
-
-        adapter.update(list)
     }
 
     private fun getData(isSearch: Boolean = false, query: String = "") {
@@ -157,20 +164,54 @@ open class MovieTvListFragment : Fragment() {
         loading_animation.visibility = View.VISIBLE
 
         IdlingResourceUtil.increment()
-        when(listType) {
+        if (isFavorite) {
+            getFavoriteData()
+            return
+        }
+
+        when (listType) {
             ListType.MOVIE -> {
                 if (isSearch)
                     vm.searchMovie(query, isFavorite)
                 else
-                    vm.getMovies(isFavorite)
+                    vm.getMovies()
             }
             ListType.TVSHOW -> {
                 if (isSearch)
                     vm.searchTvShow(query, isFavorite)
                 else
-                    vm.getTvShow(isFavorite)
+                    vm.getTvShow()
             }
         }
+    }
+
+    private fun getFavoriteData() {
+        when (listType) {
+            ListType.MOVIE -> {
+                vm.getFavMovies().observe(this, Observer {
+                    hideLoadingShowList()
+                    updateFavAdapter(it)
+                })
+            }
+            ListType.TVSHOW -> {
+                vm.getFavTvShows().observe(this, Observer {
+                    hideLoadingShowList()
+                    updateFavAdapter(it)
+                })
+            }
+        }
+    }
+
+    private fun updateFavAdapter(list: PagedList<MovieTvShow>) {
+        favAdapter.submitList(list)
+        favAdapter.notifyDataSetChanged()
+    }
+
+    private fun openDetail(item: MovieTvShow) {
+        val intent = Intent(this.activity, MovieDetailActivity::class.java)
+        intent.putExtra("data", item)
+        intent.putExtra("type", listType.name)
+        startActivityForResult(intent, 100)
     }
 
     private fun displayFailureInfo(ex: Exception) {
@@ -191,7 +232,7 @@ open class MovieTvListFragment : Fragment() {
 
     @Subscribe
     fun onSearchEvent(e: SearchEvent<Any>) {
-        when(e) {
+        when (e) {
             is SearchEvent.Started -> adapter.update(emptyList())
             is SearchEvent.Query -> getData(true, e.text)
             is SearchEvent.Closed -> {
