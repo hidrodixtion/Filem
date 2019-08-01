@@ -191,12 +191,14 @@ open class MovieTvListFragment : Fragment() {
                 vm.getFavMovies().observe(this, Observer {
                     hideLoadingShowList()
                     updateFavAdapter(it)
+                    IdlingResourceUtil.decrement()
                 })
             }
             ListType.TVSHOW -> {
                 vm.getFavTvShows().observe(this, Observer {
                     hideLoadingShowList()
                     updateFavAdapter(it)
+                    IdlingResourceUtil.decrement()
                 })
             }
         }
@@ -237,7 +239,8 @@ open class MovieTvListFragment : Fragment() {
             is SearchEvent.Query -> getData(true, e.text)
             is SearchEvent.Closed -> {
                 isSearch = false
-                adapter.update(listMovies)
+                if (::adapter.isInitialized)
+                    adapter.update(listMovies)
             }
         }
     }
